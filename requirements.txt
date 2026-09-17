@@ -1,8 +1,9 @@
 gradio
-gnews
-ddgs
-textblob
 pandas
 scikit-learn
+textblob
+gnews
+ddgs
 transformers
-torch
+--find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+torch==2.2.0+cpu
