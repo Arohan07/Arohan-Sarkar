@@ -52,7 +52,7 @@ try:
     fake_df = fake_df[fake_df['text'].str.len() > 100]
     true_df = true_df[true_df['text'].str.len() > 100]
 
-    min_count = min(len(fake_df), len(true_df), 15000)
+    min_count = min(len(fake_df), len(true_df), 2000)
     fake_sample = fake_df.sample(n=min_count, random_state=42)
     true_sample = true_df.sample(n=min_count, random_state=42)
 
@@ -68,11 +68,15 @@ try:
     model = LogisticRegression(class_weight='balanced', max_iter=1000)
     model.fit(X_train_vec, y_train)
 
-    emotion_analyzer = pipeline(
-        "text-classification", 
-        model="bhadresh-savani/roberta-base-emotion", 
-        top_k=None
-    )
+    def analyze_emotion_lightweight(text):
+    blob = TextBlob(text)
+    polarity = blob.sentiment.polarity
+    if polarity > 0.3:
+        return {"label": "POSITIVE / OPTIMISTIC", "score": polarity}
+    elif polarity < -0.3:
+        return {"label": "NEGATIVE / SENSATIONAL", "score": abs(polarity)}
+    else:
+        return {"label": "NEUTRAL / INFORMATIONAL", "score": 1.0 - abs(polarity)}
     print("✅ Model Training & Pipeline Complete!")
 
 except Exception as e:
@@ -163,7 +167,7 @@ def verify_article_ui(user_input):
     # RoBERTa Emotion
     raw_emotions = emotion_analyzer(user_input[:512])
     emotions_list = raw_emotions[0] if isinstance(raw_emotions[0], list) else raw_emotions
-    top_emotion = max(emotions_list, key=lambda x: x['score'])
+    top_emotion = analyze_emotion_lightweight(user_input[:512])
 
     # Final Verdict Logic
     if pred == 0 and has_web_matches:
