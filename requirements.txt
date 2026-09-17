@@ -1,8 +1,8 @@
 gradio
+gnews
+ddgs
+textblob
 pandas
 scikit-learn
-textblob
-gnews
-duckduckgo_search
 transformers
 torch
