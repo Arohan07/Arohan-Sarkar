@@ -1,0 +1,8 @@
+gradio
+gnews
+ddgs
+textblob
+pandas
+scikit-learn
+transformers
+torch
