@@ -5,5 +5,3 @@ textblob
 pandas
 scikit-learn
 transformers
-torch
-pip install --upgrade pip
